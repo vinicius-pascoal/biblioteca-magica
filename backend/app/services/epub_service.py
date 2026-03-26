@@ -25,6 +25,8 @@ class EpubService:
         book.set_language("pt-BR")
         book.add_author(author)
 
+        cover_defined = False
+
         chapters = []
         for chapter_idx, chapter_data in enumerate(structure.get("chapters", []), start=1):
             chapter_title = chapter_data.get(
@@ -46,14 +48,20 @@ class EpubService:
                     img_path = Path(item.get("path", ""))
                     if not img_path.exists():
                         continue
+                    ext = img_path.suffix.replace(".", "").lower() or "png"
                     img_name = f"images/{img_path.name}"
                     image_item = epub.EpubItem(
                         uid=f"img-{img_path.stem}",
                         file_name=img_name,
-                        media_type=f"image/{img_path.suffix.replace('.', '') or 'png'}",
+                        media_type=f"image/{ext}",
                         content=img_path.read_bytes(),
                     )
                     book.add_item(image_item)
+
+                    if not cover_defined:
+                        book.set_cover(f"cover.{ext}", img_path.read_bytes())
+                        cover_defined = True
+
                     body_parts.append(
                         f'<figure><img src="{img_name}" alt="Imagem extraida"/></figure>')
                     caption = item.get("caption", "").strip()
