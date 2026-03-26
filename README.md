@@ -11,6 +11,11 @@ Projeto local para converter e traduzir PDF para EPUB (reflowable) usando FastAP
 - Backend: FastAPI, PyMuPDF, EbookLib, Requests, Langdetect
 - Traducao: LibreTranslate local
 
+## Pre-requisitos
+- Python 3.11+
+- Node.js 18+
+- npm 9+
+
 ## Estrutura
 - frontend: UI 8-bit magica para upload, progresso, preview e download
 - backend: API de jobs e pipeline PDF -> extracao -> traducao -> EPUB
@@ -69,8 +74,8 @@ Em outro terminal (tambem dentro de backend):
 ```powershell
 cd backend
 .\.venv\Scripts\Activate.ps1
-.venv\Scripts\python -m pip install libretranslate
-.venv\Scripts\libretranslate.exe --host 127.0.0.1 --port 5000 --load-only en,pt
+.\.venv\Scripts\python -m pip install libretranslate
+.\.venv\Scripts\libretranslate.exe --host 127.0.0.1 --port 5000 --load-only en,pt
 ```
 
 Observacao: se preferir, ative a venv antes e rode apenas `libretranslate ...`.
@@ -93,3 +98,4 @@ LibreTranslate: http://127.0.0.1:5000
 - Em caso de falha de traducao de um bloco, o backend preserva o texto original.
 - A estrutura atual de saida organiza conteudo em capitulo continuo (chapter-1), com preview disponivel via endpoint de capitulos.
 - Jobs sao mantidos em memoria no backend (reiniciar API limpa historico em execucao).
+- O idioma de destino padrao atual e `pt` (configuravel em `backend/app/core/config.py`).

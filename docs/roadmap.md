@@ -1,28 +1,46 @@
 # Roadmap Biblioteca Magica
 
-## Fase 1 - MVP local
-- Upload de PDF
-- Extração de texto e imagens
-- Tradução para pt-BR via LibreTranslate
-- Geração de EPUB reflowable
-- Download do arquivo final
+## Status atual (versao em execucao)
 
-## Fase 2 - Qualidade de extração
-- Heurística para remover cabeçalhos e rodapés
-- Melhor detecção de títulos e subtítulos
-- Melhor associação de imagem e legenda
+### Entregue
+- [x] Upload de PDF e criacao de job assincrono.
+- [x] Extracao de texto e imagens com PyMuPDF.
+- [x] Traducao via LibreTranslate local.
+- [x] Deteccao automatica de idioma de origem.
+- [x] Geracao de EPUB reflowable.
+- [x] Capa automatica com a primeira imagem extraida (quando houver).
+- [x] Polling de progresso geral e progresso de traducao.
+- [x] Preview de capitulos via API.
+- [x] Download do EPUB final.
 
-## Fase 3 - Qualidade de tradução
-- Detecção automática de idioma
-- Glossário customizado por projeto
-- Cache de traduções repetidas
+### Limitacoes conhecidas
+- [ ] Jobs em memoria (reiniciar backend limpa historico em execucao).
+- [ ] Estrutura de capitulos ainda em modo continuo (chapter-1).
+- [ ] Foco em PDFs digitais; OCR para PDF escaneado ainda nao implementado.
 
-## Fase 4 - UX avançada
-- Preview de capítulos antes de exportar
-- Visualização das imagens extraídas
-- Painel de logs por job
+## Proxima fase (prioridade alta)
 
-## Fase 5 - Escalabilidade local
-- Fila interna de jobs
-- Batch de múltiplos PDFs
-- Rotina de limpeza automática de artefatos antigos
+### Fase 2 - Robustez e qualidade de extracao
+- [ ] OCR opcional para PDFs escaneados.
+- [ ] Heuristica para remover cabecalhos e rodapes repetidos.
+- [ ] Melhor associacao entre imagem e legenda.
+- [ ] Segmentacao de capitulos mais inteligente (alem de capitulo unico).
+
+### Fase 3 - Qualidade de traducao
+- [ ] Glossario customizado por projeto.
+- [ ] Cache/memoria de traducao local para blocos repetidos.
+- [ ] Revisao opcional de trechos com baixa confianca.
+
+## Evolucao de produto (medio prazo)
+
+### Fase 4 - UX e operacao
+- [ ] Tela de historico de jobs com reprocessamento.
+- [ ] Preview lado a lado (original x traduzido).
+- [ ] Painel de logs por job no frontend.
+- [ ] Configuracao de perfil de saida EPUB (tipografia/espacamento).
+
+### Fase 5 - Escalabilidade local
+- [ ] Fila interna com concorrencia controlada.
+- [ ] Processamento em lote de multiplos PDFs.
+- [ ] Limpeza automatica de artefatos antigos.
+- [ ] Persistencia de metadados de job (SQLite/PostgreSQL).
