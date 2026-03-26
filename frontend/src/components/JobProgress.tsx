@@ -6,7 +6,19 @@ interface JobProgressProps {
 
 export function JobProgress({ job }: JobProgressProps) {
   if (!job) {
-    return null;
+    return (
+      <section className="status-card">
+        <h2>Status do processamento</h2>
+        <p>Preparando o grimorio para traducao...</p>
+        <div className="mana-bar">
+          <span className="mana-orb" aria-hidden="true" />
+          <div className="progress-track" role="progressbar" aria-valuenow={0}>
+            <div className="progress-fill" style={{ width: "8%" }} />
+            <span className="mana-percent">...</span>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

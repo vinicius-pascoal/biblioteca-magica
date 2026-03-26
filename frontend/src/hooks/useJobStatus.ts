@@ -26,6 +26,10 @@ export function useJobStatus(jobId: string | null) {
             timer = window.setTimeout(poll, 1500);
           }
         }
+      } catch {
+        if (!cancelled) {
+          timer = window.setTimeout(poll, 1500);
+        }
       } finally {
         if (!cancelled) {
           setIsLoading(false);

@@ -17,6 +17,11 @@ export function HomePage() {
   const [previewTargetLang, setPreviewTargetLang] = useState<string | null>(null);
 
   const { job, isLoading } = useJobStatus(jobId);
+  const isFailed = job?.status === "failed";
+  const isDone = job?.status === "done";
+  const hasActiveJob = Boolean(jobId) && !isDone && !isFailed;
+  const isProcessing = isSending || hasActiveJob;
+  const canUpload = !isSending && (!jobId || isFailed);
 
   const downloadUrl = useMemo(() => {
     if (!jobId || job?.status !== "done") {
@@ -78,19 +83,23 @@ export function HomePage() {
         <p>Converta e traduza PDF para EPUB reflow em pt-BR com processamento local.</p>
       </header>
 
-      <FileUpload onSubmit={handleUpload} disabled={isSending || isLoading} />
+      {canUpload ? <FileUpload onSubmit={handleUpload} disabled={isSending || isLoading} /> : null}
 
       {submitError ? <p className="error">{submitError}</p> : null}
 
-      <JobProgress job={job} />
+      {canUpload && isFailed ? <p className="error">{job.error || "Falha no processamento."}</p> : null}
 
-      <ChapterPreview
-        chapters={chapters}
-        sourceLanguage={previewSourceLang ?? job?.source_language ?? null}
-        targetLanguage={previewTargetLang}
-      />
+      {isProcessing ? <JobProgress job={job} /> : null}
 
-      {downloadUrl ? <DownloadCard url={downloadUrl} /> : null}
+      {isDone ? (
+        <ChapterPreview
+          chapters={chapters}
+          sourceLanguage={previewSourceLang ?? job?.source_language ?? null}
+          targetLanguage={previewTargetLang}
+        />
+      ) : null}
+
+      {isDone && downloadUrl ? <DownloadCard url={downloadUrl} /> : null}
     </main>
   );
 }

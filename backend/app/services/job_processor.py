@@ -34,7 +34,8 @@ class JobProcessor:
             structure["source_language"] = detected_source
             job.source_language = detected_source
 
-            total_blocks = self.translate_service.count_translatable_blocks(structure)
+            total_blocks = self.translate_service.count_translatable_blocks(
+                structure)
 
             def on_translate_progress(done: int, total: int) -> None:
                 pct = 0 if total == 0 else int((done / total) * 100)

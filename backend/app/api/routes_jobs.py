@@ -62,7 +62,8 @@ def get_job(job_id: str) -> JobStatusResponse:
         translation_progress=job.translation_progress,
         translation_done=job.translation_done,
         translation_total=job.translation_total,
-        translation_remaining=max(job.translation_total - job.translation_done, 0),
+        translation_remaining=max(
+            job.translation_total - job.translation_done, 0),
         message=job.message,
         source_language=job.source_language,
         error=job.error,
