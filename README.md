@@ -2,6 +2,10 @@
 
 Projeto local para converter e traduzir PDF para EPUB (reflowable) usando FastAPI no backend e React + Vite no frontend.
 
+## Demo
+
+![Demo do sistema](demo.png)
+
 ## Stack
 - Frontend: React, Vite, TypeScript, Axios
 - Backend: FastAPI, PyMuPDF, EbookLib, Requests
