@@ -34,11 +34,32 @@ class JobProcessor:
             structure["source_language"] = detected_source
             job.source_language = detected_source
 
-            job.touch(progress=60, message="Traduzindo conteudo")
+            total_blocks = self.translate_service.count_translatable_blocks(structure)
+
+            def on_translate_progress(done: int, total: int) -> None:
+                pct = 0 if total == 0 else int((done / total) * 100)
+                overall = 60 if total == 0 else 60 + int((done / total) * 24)
+                remaining = max(total - done, 0)
+                job.touch(
+                    progress=overall,
+                    translation_progress=pct,
+                    translation_done=done,
+                    translation_total=total,
+                    message=f"Traduzindo conteudo ({pct}%) - faltam {remaining} blocos",
+                )
+
+            job.touch(
+                progress=60,
+                translation_progress=0,
+                translation_done=0,
+                translation_total=total_blocks,
+                message="Traduzindo conteudo",
+            )
             translated, warnings = self.translate_service.translate_structure(
                 structure,
                 source=detected_source,
                 target=settings.target_language,
+                progress_callback=on_translate_progress,
             )
 
             translated_path = paths["translated"] / "translated_content.json"
@@ -60,7 +81,14 @@ class JobProcessor:
                 msg = f"EPUB gerado com avisos ({len(warnings)})"
 
             job.epub_path = epub_file
-            job.touch(status="done", progress=100, message=msg)
+            job.touch(
+                status="done",
+                progress=100,
+                translation_progress=100 if total_blocks > 0 else 0,
+                translation_done=total_blocks,
+                translation_total=total_blocks,
+                message=msg,
+            )
         except Exception as exc:
             job.touch(
                 status="failed",

@@ -12,6 +12,10 @@ class JobStatusResponse(BaseModel):
     job_id: str
     status: str
     progress: int
+    translation_progress: int = 0
+    translation_done: int = 0
+    translation_total: int = 0
+    translation_remaining: int = 0
     message: str
     source_language: str | None = None
     error: str | None = None

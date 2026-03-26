@@ -9,6 +9,10 @@ export interface JobStatusResponse {
   job_id: string;
   status: JobStatus;
   progress: number;
+  translation_progress: number;
+  translation_done: number;
+  translation_total: number;
+  translation_remaining: number;
   message: string;
   source_language?: string | null;
   error?: string | null;

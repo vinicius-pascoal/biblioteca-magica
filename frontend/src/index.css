@@ -129,12 +129,10 @@ header p {
   inset: -2px;
   pointer-events: none;
   border: 2px solid rgba(9, 10, 22, 0.9);
-  clip-path: polygon(
-    0 8px, 8px 8px, 8px 0,
-    calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
-    100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
-    8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
-  );
+  clip-path: polygon(0 8px, 8px 8px, 8px 0,
+      calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
+      100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
+      8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px));
 }
 
 h2 {
@@ -214,6 +212,10 @@ button:disabled {
   gap: 0.55rem;
 }
 
+.translation-bar {
+  margin-top: 0.35rem;
+}
+
 .mana-orb {
   width: 16px;
   height: 16px;
@@ -226,15 +228,21 @@ button:disabled {
   box-shadow: 0 0 0 2px rgba(7, 11, 27, 0.72), 0 0 12px rgba(113, 242, 255, 0.72);
 }
 
+.translation-orb {
+  background:
+    radial-gradient(circle at 35% 35%, #fff5cb 0 18%, #ffd277 25% 52%, #ff9450 62% 100%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.18) 0 2px, rgba(255, 255, 255, 0) 2px 4px);
+  border-color: rgba(255, 217, 130, 0.8);
+  box-shadow: 0 0 0 2px rgba(7, 11, 27, 0.72), 0 0 12px rgba(255, 186, 86, 0.72);
+}
+
 .progress-track::before {
   content: "";
   position: absolute;
   inset: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(90, 123, 186, 0.15) 0 8px,
-    rgba(90, 123, 186, 0.26) 8px 16px
-  );
+  background: repeating-linear-gradient(90deg,
+      rgba(90, 123, 186, 0.15) 0 8px,
+      rgba(90, 123, 186, 0.26) 8px 16px);
 }
 
 .progress-fill {
@@ -245,6 +253,17 @@ button:disabled {
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0 8px, rgba(255, 255, 255, 0.05) 8px 16px);
   transition: width 0.35s ease;
   box-shadow: inset 0 -2px 0 rgba(5, 29, 43, 0.5), inset 0 2px 0 rgba(188, 255, 255, 0.45);
+}
+
+.translation-fill {
+  background:
+    linear-gradient(90deg, #ffc45b, #ffd973 45%, #ffb05b 75%, #ff9652),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.24) 0 8px, rgba(255, 255, 255, 0.06) 8px 16px);
+  box-shadow: inset 0 -2px 0 rgba(69, 26, 2, 0.5), inset 0 2px 0 rgba(255, 239, 179, 0.45);
+}
+
+.translation-meta {
+  margin: 0.45rem 0 0.1rem;
 }
 
 .progress-fill::after {

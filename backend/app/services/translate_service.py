@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 
 import requests
 from langdetect import LangDetectException, detect
@@ -69,8 +70,28 @@ class TranslateService:
         except LangDetectException:
             return self._normalize_lang(fallback)
 
-    def translate_structure(self, structure: dict, source: str, target: str) -> tuple[dict, list[str]]:
+    @staticmethod
+    def count_translatable_blocks(structure: dict) -> int:
+        total = 0
+        for chapter in structure.get("chapters", []):
+            for item in chapter.get("items", []):
+                if item.get("type") in {"paragraph", "heading"}:
+                    total += 1
+        return total
+
+    def translate_structure(
+        self,
+        structure: dict,
+        source: str,
+        target: str,
+        progress_callback: Callable[[int, int], None] | None = None,
+    ) -> tuple[dict, list[str]]:
         warnings: list[str] = []
+        total = self.count_translatable_blocks(structure)
+        done = 0
+
+        if progress_callback is not None:
+            progress_callback(done, total)
 
         for chapter in structure.get("chapters", []):
             for item in chapter.get("items", []):
@@ -80,6 +101,9 @@ class TranslateService:
                 original = item.get("text", "")
                 if not original:
                     item["translated_text"] = ""
+                    done += 1
+                    if progress_callback is not None:
+                        progress_callback(done, total)
                     continue
 
                 translated = ""
@@ -98,5 +122,8 @@ class TranslateService:
                             time.sleep(0.8 * attempt)
 
                 item["translated_text"] = translated
+                done += 1
+                if progress_callback is not None:
+                    progress_callback(done, total)
 
         return structure, warnings
