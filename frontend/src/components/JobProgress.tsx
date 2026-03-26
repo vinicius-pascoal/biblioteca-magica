@@ -19,10 +19,13 @@ export function JobProgress({ job }: JobProgressProps) {
         Estado: <strong>{job.status}</strong>
       </p>
       <p>{job.message}</p>
-      <div className="progress-track" role="progressbar" aria-valuenow={job.progress}>
-        <div className="progress-fill" style={{ width: `${job.progress}%` }} />
+      <div className="mana-bar">
+        <span className="mana-orb" aria-hidden="true" />
+        <div className="progress-track" role="progressbar" aria-valuenow={job.progress}>
+          <div className="progress-fill" style={{ width: `${job.progress}%` }} />
+          <span className="mana-percent">{job.progress}%</span>
+        </div>
       </div>
-      <p>{job.progress}%</p>
       {job.error ? <p className="error">{job.error}</p> : null}
     </section>
   );

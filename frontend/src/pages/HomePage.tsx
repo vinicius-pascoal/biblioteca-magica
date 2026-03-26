@@ -72,7 +72,8 @@ export function HomePage() {
 
   return (
     <main className="container">
-      <header>
+      <header className="hero">
+        <span className="hero-tag">TOMO ARCANO 8-BIT</span>
         <h1>Biblioteca Magica</h1>
         <p>Converta e traduza PDF para EPUB reflow em pt-BR com processamento local.</p>
       </header>
