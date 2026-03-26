@@ -13,6 +13,7 @@ class Job:
     status: str = "processing"
     progress: int = 0
     message: str = "Job criado"
+    source_language: str | None = None
     epub_path: Path | None = None
     error: str | None = None
     created_at: datetime = field(

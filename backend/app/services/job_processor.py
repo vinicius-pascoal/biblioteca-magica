@@ -27,10 +27,17 @@ class JobProcessor:
             structure = self.extract_service.extract(
                 job.input_pdf_path, paths["extracted"])
 
+            job.touch(progress=45, message="Detectando idioma de origem")
+            detected_source = self.translate_service.detect_source_language(
+                structure, fallback=settings.source_language
+            )
+            structure["source_language"] = detected_source
+            job.source_language = detected_source
+
             job.touch(progress=60, message="Traduzindo conteudo")
             translated, warnings = self.translate_service.translate_structure(
                 structure,
-                source=settings.source_language,
+                source=detected_source,
                 target=settings.target_language,
             )
 

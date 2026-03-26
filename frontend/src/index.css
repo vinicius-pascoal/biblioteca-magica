@@ -31,7 +31,8 @@ header p {
 
 .upload-card,
 .status-card,
-.download-card {
+.download-card,
+.chapter-preview-card {
   margin-top: 1.25rem;
   padding: 1rem;
   border: 1px solid #cbb9a4;
@@ -87,6 +88,28 @@ button:disabled {
 
 .hint {
   color: #5c4b3a;
+}
+
+.chapter-list {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.chapter-item {
+  border: 1px solid #e2d4c4;
+  border-radius: 10px;
+  background: #fffcf8;
+  padding: 0.75rem;
+}
+
+.chapter-item h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.chapter-item p {
+  margin: 0.45rem 0 0;
 }
 
 @media (max-width: 600px) {

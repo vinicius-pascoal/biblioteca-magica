@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import re
 import json
+import re
 from pathlib import Path
 
 import fitz
@@ -24,23 +24,20 @@ def _is_heading(text: str, avg_size: float) -> bool:
 
 
 class ExtractService:
+    @staticmethod
+    def _split_into_chapters(items: list[dict]) -> list[dict]:
+        # Mantem estrutura continua sem separadores por heading.
+        return [
+            {
+                "id": "chapter-1",
+                "title": "Conteudo",
+                "items": items,
+            }
+        ]
+
     def extract(self, pdf_path: Path, extracted_dir: Path) -> dict:
         extracted_dir.mkdir(parents=True, exist_ok=True)
-
-        structure = {
-            "title": pdf_path.stem,
-            "source_language": "en",
-            "target_language": "pt-BR",
-            "chapters": [
-                {
-                    "id": "chapter-1",
-                    "title": "Conteudo",
-                    "items": [],
-                }
-            ],
-        }
-
-        items = structure["chapters"][0]["items"]
+        flat_items: list[dict] = []
 
         with fitz.open(pdf_path) as doc:
             for page_idx, page in enumerate(doc, start=1):
@@ -71,7 +68,7 @@ class ExtractService:
                     item_type = "heading" if _is_heading(
                         text, avg_size) else "paragraph"
 
-                    items.append(
+                    flat_items.append(
                         {
                             "id": f"p-{page_idx}-{block_idx}",
                             "type": item_type,
@@ -90,7 +87,7 @@ class ExtractService:
                     image_path = extracted_dir / image_name
                     image_path.write_bytes(image_bytes)
 
-                    items.append(
+                    flat_items.append(
                         {
                             "id": f"img-{page_idx}-{img_idx}",
                             "type": "image",
@@ -99,6 +96,13 @@ class ExtractService:
                             "caption": "",
                         }
                     )
+
+        structure = {
+            "title": pdf_path.stem,
+            "source_language": "auto",
+            "target_language": "pt-BR",
+            "chapters": self._split_into_chapters(flat_items),
+        }
 
         structure_path = extracted_dir / "structured_content.json"
         structure_path.write_text(

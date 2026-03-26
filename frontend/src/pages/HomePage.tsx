@@ -1,15 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
+import { ChapterPreview } from "../components/ChapterPreview";
 import { DownloadCard } from "../components/DownloadCard";
 import { FileUpload } from "../components/FileUpload";
 import { JobProgress } from "../components/JobProgress";
 import { useJobStatus } from "../hooks/useJobStatus";
-import { createJob, getDownloadUrl } from "../services/api";
+import { createJob, getDownloadUrl, getJobChapters } from "../services/api";
+import type { ChapterPreview as ChapterPreviewItem } from "../types/job";
 
 export function HomePage() {
   const [jobId, setJobId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
+  const [chapters, setChapters] = useState<ChapterPreviewItem[]>([]);
+  const [previewSourceLang, setPreviewSourceLang] = useState<string | null>(null);
+  const [previewTargetLang, setPreviewTargetLang] = useState<string | null>(null);
 
   const { job, isLoading } = useJobStatus(jobId);
 
@@ -19,6 +24,38 @@ export function HomePage() {
     }
     return getDownloadUrl(jobId);
   }, [job, jobId]);
+
+  useEffect(() => {
+    if (!jobId) {
+      setChapters([]);
+      setPreviewSourceLang(null);
+      setPreviewTargetLang(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadPreview = async () => {
+      try {
+        const preview = await getJobChapters(jobId);
+        if (!cancelled) {
+          setChapters(preview.chapters);
+          setPreviewSourceLang(preview.source_language ?? null);
+          setPreviewTargetLang(preview.target_language ?? null);
+        }
+      } catch {
+        if (!cancelled) {
+          setChapters([]);
+        }
+      }
+    };
+
+    loadPreview();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [jobId, job?.progress, job?.status]);
 
   const handleUpload = async (file: File) => {
     setSubmitError(null);
@@ -45,6 +82,12 @@ export function HomePage() {
       {submitError ? <p className="error">{submitError}</p> : null}
 
       <JobProgress job={job} />
+
+      <ChapterPreview
+        chapters={chapters}
+        sourceLanguage={previewSourceLang ?? job?.source_language ?? null}
+        targetLanguage={previewTargetLang}
+      />
 
       {downloadUrl ? <DownloadCard url={downloadUrl} /> : null}
     </main>

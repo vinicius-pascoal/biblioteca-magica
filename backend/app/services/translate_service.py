@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 
 import requests
+from langdetect import LangDetectException, detect
 
 from app.core.config import settings
 
@@ -33,6 +34,40 @@ class TranslateService:
         translated_chunks = [self._translate_chunk(
             chunk, source, target) for chunk in chunks]
         return "".join(translated_chunks)
+
+    @staticmethod
+    def _normalize_lang(lang: str) -> str:
+        normalized = (lang or "").strip().lower()
+        aliases = {
+            "pt-br": "pt",
+            "pt-pt": "pt",
+            "zh-cn": "zh",
+            "zh-tw": "zh",
+        }
+        return aliases.get(normalized, normalized)
+
+    def detect_source_language(self, structure: dict, fallback: str) -> str:
+        samples: list[str] = []
+        for chapter in structure.get("chapters", []):
+            for item in chapter.get("items", []):
+                if item.get("type") in {"paragraph", "heading"}:
+                    text = item.get("text", "").strip()
+                    if text:
+                        samples.append(text)
+                if len(samples) >= 10:
+                    break
+            if len(samples) >= 10:
+                break
+
+        sample_text = " ".join(samples)[:3000].strip()
+        if len(sample_text) < 20:
+            return self._normalize_lang(fallback)
+
+        try:
+            detected = detect(sample_text)
+            return self._normalize_lang(detected)
+        except LangDetectException:
+            return self._normalize_lang(fallback)
 
     def translate_structure(self, structure: dict, source: str, target: str) -> tuple[dict, list[str]]:
         warnings: list[str] = []
