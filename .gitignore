@@ -1,0 +1,21 @@
+# Python
+backend/.venv/
+backend/**/__pycache__/
+backend/**/*.pyc
+
+# Backend storage artifacts
+backend/storage/input/*
+backend/storage/extracted/*
+backend/storage/translated/*
+backend/storage/epub/*
+backend/storage/temp/*
+!backend/storage/**/.gitkeep
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
