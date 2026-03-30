@@ -17,6 +17,8 @@ services:
       LIBRETRANSLATE_URL: http://libretranslate:5000/translate
       SOURCE_LANGUAGE: en
       TARGET_LANGUAGE: pt
+      JOB_TTL_HOURS: 24
+      CLEANUP_INTERVAL_MINUTES: 15
     volumes:
       - ./backend/app:/app/app
       - ./backend/storage:/app/storage

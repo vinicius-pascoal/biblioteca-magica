@@ -23,6 +23,9 @@ class Settings(BaseModel):
     target_language: str = os.getenv("TARGET_LANGUAGE", "pt")
     max_translate_chunk_size: int = _get_int_env(
         "MAX_TRANSLATE_CHUNK_SIZE", 1800)
+    job_ttl_hours: int = _get_int_env("JOB_TTL_HOURS", 24)
+    cleanup_interval_minutes: int = _get_int_env(
+        "CLEANUP_INTERVAL_MINUTES", 15)
 
 
 settings = Settings()

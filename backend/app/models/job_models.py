@@ -19,6 +19,7 @@ class Job:
     source_language: str | None = None
     epub_path: Path | None = None
     error: str | None = None
+    cancel_requested: bool = False
     created_at: datetime = field(
         default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(

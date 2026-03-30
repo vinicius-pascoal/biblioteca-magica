@@ -1,4 +1,4 @@
-export type JobStatus = "processing" | "done" | "failed";
+export type JobStatus = "processing" | "done" | "failed" | "canceled";
 
 export interface JobCreateResponse {
   job_id: string;
@@ -16,6 +16,12 @@ export interface JobStatusResponse {
   message: string;
   source_language?: string | null;
   error?: string | null;
+}
+
+export interface JobCancelResponse {
+  job_id: string;
+  status: string;
+  message: string;
 }
 
 export interface ChapterPreview {

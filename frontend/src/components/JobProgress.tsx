@@ -2,9 +2,11 @@ import type { JobStatusResponse } from "../types/job";
 
 interface JobProgressProps {
   job: JobStatusResponse | null;
+  onCancel: (() => void) | null;
+  isCanceling?: boolean;
 }
 
-export function JobProgress({ job }: JobProgressProps) {
+export function JobProgress({ job, onCancel, isCanceling = false }: JobProgressProps) {
   if (!job) {
     return (
       <section className="status-card">
@@ -20,6 +22,8 @@ export function JobProgress({ job }: JobProgressProps) {
       </section>
     );
   }
+
+  const canCancel = job.status === "processing" && Boolean(onCancel);
 
   return (
     <section className="status-card">
@@ -52,6 +56,12 @@ export function JobProgress({ job }: JobProgressProps) {
           <span className="mana-percent">{job.translation_progress}%</span>
         </div>
       </div>
+
+      {canCancel ? (
+        <button type="button" className="cancel-button" onClick={onCancel!} disabled={isCanceling}>
+          {isCanceling ? "Cancelando..." : "Cancelar job"}
+        </button>
+      ) : null}
 
       {job.error ? <p className="error">{job.error}</p> : null}
     </section>

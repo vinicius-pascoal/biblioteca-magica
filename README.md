@@ -43,6 +43,7 @@ Projeto local para converter e traduzir PDF para EPUB (reflowable) usando FastAP
 - `GET /health`: health check.
 - `POST /jobs`: cria job a partir de um PDF.
 - `GET /jobs/{job_id}`: status e progresso do job.
+- `POST /jobs/{job_id}/cancel`: solicita cancelamento de job em andamento.
 - `GET /jobs/{job_id}/chapters`: preview de capitulos extraidos/traduzidos.
 - `GET /jobs/{job_id}/download`: download do EPUB pronto.
 
@@ -73,6 +74,9 @@ Observacoes do Compose:
 - O backend usa o endpoint interno `http://libretranslate:5000/translate`.
 - A pasta `backend/storage` fica montada como volume para manter os arquivos gerados.
 - O frontend usa `VITE_API_BASE_URL=http://127.0.0.1:8000`.
+- Limpeza automatica de jobs/arquivos antigos via TTL:
+	- `JOB_TTL_HOURS` (padrao: `24`)
+	- `CLEANUP_INTERVAL_MINUTES` (padrao: `15`)
 
 ### 1. Subir o backend
 Windows PowerShell:
@@ -122,6 +126,8 @@ LibreTranslate: http://127.0.0.1:5000
 ## Observacoes
 - O projeto esta focado em PDFs com texto digital (nao escaneados).
 - Em caso de falha de traducao de um bloco, o backend preserva o texto original.
+- Cancelamento de job e cooperativo: o status muda para `canceled` e os artefatos temporarios do job sao removidos.
+- Jobs finalizados e artefatos antigos sao removidos automaticamente conforme TTL configurado.
 - A estrutura atual de saida organiza conteudo em capitulo continuo (chapter-1), com preview disponivel via endpoint de capitulos.
 - Jobs sao mantidos em memoria no backend (reiniciar API limpa historico em execucao).
 - O idioma de destino padrao atual e `pt` (configuravel em `backend/app/core/config.py`).

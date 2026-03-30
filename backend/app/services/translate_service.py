@@ -85,6 +85,7 @@ class TranslateService:
         source: str,
         target: str,
         progress_callback: Callable[[int, int], None] | None = None,
+        should_cancel: Callable[[], bool] | None = None,
     ) -> tuple[dict, list[str]]:
         warnings: list[str] = []
         total = self.count_translatable_blocks(structure)
@@ -94,7 +95,11 @@ class TranslateService:
             progress_callback(done, total)
 
         for chapter in structure.get("chapters", []):
+            if should_cancel is not None and should_cancel():
+                raise RuntimeError("JOB_CANCELED")
             for item in chapter.get("items", []):
+                if should_cancel is not None and should_cancel():
+                    raise RuntimeError("JOB_CANCELED")
                 if item.get("type") not in {"paragraph", "heading"}:
                     continue
 

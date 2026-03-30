@@ -8,6 +8,12 @@ class JobCreateResponse(BaseModel):
     status: str
 
 
+class JobCancelResponse(BaseModel):
+    job_id: str
+    status: str
+    message: str
+
+
 class JobStatusResponse(BaseModel):
     job_id: str
     status: str

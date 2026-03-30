@@ -11,6 +11,10 @@ from app.services.pdf_service import PDFService
 from app.services.translate_service import TranslateService
 
 
+class JobCanceledError(Exception):
+    pass
+
+
 class JobProcessor:
     def __init__(self) -> None:
         self.pdf_service = PDFService()
@@ -18,15 +22,23 @@ class JobProcessor:
         self.translate_service = TranslateService()
         self.epub_service = EpubService()
 
+    @staticmethod
+    def _raise_if_cancel_requested(job: Job) -> None:
+        if job.cancel_requested:
+            raise JobCanceledError("Job cancelado pelo usuario")
+
     def process(self, job: Job, paths: dict[str, Path]) -> None:
         try:
+            self._raise_if_cancel_requested(job)
             job.touch(progress=10, message="Lendo metadados do PDF")
             metadata = self.pdf_service.get_pdf_metadata(job.input_pdf_path)
 
+            self._raise_if_cancel_requested(job)
             job.touch(progress=30, message="Extraindo texto e imagens")
             structure = self.extract_service.extract(
                 job.input_pdf_path, paths["extracted"])
 
+            self._raise_if_cancel_requested(job)
             job.touch(progress=45, message="Detectando idioma de origem")
             detected_source = self.translate_service.detect_source_language(
                 structure, fallback=settings.source_language
@@ -61,6 +73,7 @@ class JobProcessor:
                 source=detected_source,
                 target=settings.target_language,
                 progress_callback=on_translate_progress,
+                should_cancel=lambda: job.cancel_requested,
             )
 
             translated_path = paths["translated"] / "translated_content.json"
@@ -68,6 +81,7 @@ class JobProcessor:
                 json.dumps(translated, ensure_ascii=False, indent=2), encoding="utf-8"
             )
 
+            self._raise_if_cancel_requested(job)
             job.touch(progress=85, message="Montando EPUB")
             epub_file = paths["epub"] / f"{job.input_pdf_path.stem}_ptbr.epub"
             self.epub_service.build_epub(
@@ -89,6 +103,20 @@ class JobProcessor:
                 translation_done=total_blocks,
                 translation_total=total_blocks,
                 message=msg,
+            )
+        except RuntimeError as exc:
+            if str(exc) != "JOB_CANCELED":
+                raise
+            job.touch(
+                status="canceled",
+                message="Job cancelado pelo usuario",
+                error=None,
+            )
+        except JobCanceledError:
+            job.touch(
+                status="canceled",
+                message="Job cancelado pelo usuario",
+                error=None,
             )
         except Exception as exc:
             job.touch(

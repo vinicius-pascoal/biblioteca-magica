@@ -5,23 +5,26 @@ import { DownloadCard } from "../components/DownloadCard";
 import { FileUpload } from "../components/FileUpload";
 import { JobProgress } from "../components/JobProgress";
 import { useJobStatus } from "../hooks/useJobStatus";
-import { createJob, getDownloadUrl, getJobChapters } from "../services/api";
+import { cancelJob, createJob, getDownloadUrl, getJobChapters } from "../services/api";
 import type { ChapterPreview as ChapterPreviewItem } from "../types/job";
 
 export function HomePage() {
   const [jobId, setJobId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
+  const [isCanceling, setIsCanceling] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
   const [chapters, setChapters] = useState<ChapterPreviewItem[]>([]);
   const [previewSourceLang, setPreviewSourceLang] = useState<string | null>(null);
   const [previewTargetLang, setPreviewTargetLang] = useState<string | null>(null);
 
   const { job, isLoading } = useJobStatus(jobId);
   const isFailed = job?.status === "failed";
+  const isCanceled = job?.status === "canceled";
   const isDone = job?.status === "done";
-  const hasActiveJob = Boolean(jobId) && !isDone && !isFailed;
+  const hasActiveJob = Boolean(jobId) && !isDone && !isFailed && !isCanceled;
   const isProcessing = isSending || hasActiveJob;
-  const canUpload = !isSending && (!jobId || isFailed);
+  const canUpload = !isSending && (!jobId || isFailed || isCanceled);
 
   const downloadUrl = useMemo(() => {
     if (!jobId || job?.status !== "done") {
@@ -64,6 +67,7 @@ export function HomePage() {
 
   const handleUpload = async (file: File) => {
     setSubmitError(null);
+    setCancelError(null);
     setIsSending(true);
     try {
       const created = await createJob(file);
@@ -72,6 +76,22 @@ export function HomePage() {
       setSubmitError("Falha ao enviar arquivo para o backend.");
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!jobId || isCanceling) {
+      return;
+    }
+
+    setCancelError(null);
+    setIsCanceling(true);
+    try {
+      await cancelJob(jobId);
+    } catch {
+      setCancelError("Nao foi possivel solicitar o cancelamento do job.");
+    } finally {
+      setIsCanceling(false);
     }
   };
 
@@ -87,8 +107,11 @@ export function HomePage() {
       {submitError ? <p className="error">{submitError}</p> : null}
 
       {canUpload && isFailed ? <p className="error">{job.error || "Falha no processamento."}</p> : null}
+      {canUpload && isCanceled ? <p className="hint">Job cancelado. Envie um novo PDF para continuar.</p> : null}
 
-      {isProcessing ? <JobProgress job={job} /> : null}
+      {isProcessing ? <JobProgress job={job} onCancel={jobId ? handleCancel : null} isCanceling={isCanceling} /> : null}
+
+      {cancelError ? <p className="error">{cancelError}</p> : null}
 
       {isDone ? (
         <ChapterPreview

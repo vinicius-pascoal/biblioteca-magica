@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes_jobs import router as jobs_router
+from app.api.routes_jobs import router as jobs_router, start_job_maintenance_worker
 from app.core.config import settings
 from app.core.paths import ensure_storage_dirs
 
@@ -26,3 +26,8 @@ def health() -> dict[str, str]:
 
 
 app.include_router(jobs_router)
+
+
+@app.on_event("startup")
+def on_startup() -> None:
+    start_job_maintenance_worker()
