@@ -48,6 +48,32 @@ Projeto local para converter e traduzir PDF para EPUB (reflowable) usando FastAP
 
 ## Como rodar
 
+### Opcao rapida: Docker Compose (tudo com um comando)
+
+Pre-requisito: Docker Desktop (ou Docker Engine + Compose plugin) instalado.
+
+Na raiz do projeto:
+
+```bash
+docker compose up --build
+```
+
+Para parar:
+
+```bash
+docker compose down
+```
+
+Servicos disponiveis:
+- Frontend: http://127.0.0.1:5173
+- Backend: http://127.0.0.1:8000
+- LibreTranslate: http://127.0.0.1:5000
+
+Observacoes do Compose:
+- O backend usa o endpoint interno `http://libretranslate:5000/translate`.
+- A pasta `backend/storage` fica montada como volume para manter os arquivos gerados.
+- O frontend usa `VITE_API_BASE_URL=http://127.0.0.1:8000`.
+
 ### 1. Subir o backend
 Windows PowerShell:
 

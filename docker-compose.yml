@@ -1,0 +1,40 @@
+services:
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    command: ["--host", "0.0.0.0", "--port", "5000", "--load-only", "en,pt"]
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/languages', timeout=5)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+    environment:
+      LIBRETRANSLATE_URL: http://libretranslate:5000/translate
+      SOURCE_LANGUAGE: en
+      TARGET_LANGUAGE: pt
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/storage:/app/storage
+    ports:
+      - "8000:8000"
+    depends_on:
+      libretranslate:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      VITE_API_BASE_URL: http://127.0.0.1:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
