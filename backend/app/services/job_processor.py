@@ -91,6 +91,13 @@ class JobProcessor:
                 author=metadata.get("author") or "Desconhecido",
             )
 
+            self._raise_if_cancel_requested(job)
+            job.touch(progress=92, message="Validando integridade do EPUB")
+            self.epub_service.validate_epub_content(
+                structure=translated,
+                epub_path=epub_file,
+            )
+
             msg = "EPUB gerado com sucesso"
             if warnings:
                 msg = f"EPUB gerado com avisos ({len(warnings)})"

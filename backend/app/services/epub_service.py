@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
+import zipfile
 
 from ebooklib import epub
 
@@ -42,12 +44,16 @@ class EpubService:
                     text = item.get("translated_text") or item.get("text", "")
                     if not text:
                         continue
+                    source_id = _escape_html(str(item.get("id", "")))
                     tag = "h2" if item_type == "heading" else "p"
-                    body_parts.append(f"<{tag}>{_escape_html(text)}</{tag}>")
+                    body_parts.append(
+                        f"<{tag} data-source-id=\"{source_id}\">{_escape_html(text)}</{tag}>"
+                    )
                 elif item_type == "image":
                     img_path = Path(item.get("path", ""))
                     if not img_path.exists():
                         continue
+                    source_id = _escape_html(str(item.get("id", "")))
                     ext = img_path.suffix.replace(".", "").lower() or "png"
                     img_name = f"images/{img_path.name}"
                     image_item = epub.EpubItem(
@@ -63,7 +69,7 @@ class EpubService:
                         cover_defined = True
 
                     body_parts.append(
-                        f'<figure><img src="{img_name}" alt="Imagem extraida"/></figure>')
+                        f'<figure data-source-id="{source_id}"><img src="{img_name}" alt="Imagem extraida"/></figure>')
                     caption = item.get("caption", "").strip()
                     if caption:
                         body_parts.append(
@@ -87,3 +93,44 @@ class EpubService:
 
         epub.write_epub(str(output_path), book)
         return output_path
+
+    def validate_epub_content(self, structure: dict, epub_path: Path) -> None:
+        expected_ids: set[str] = set()
+
+        for chapter in structure.get("chapters", []):
+            for item in chapter.get("items", []):
+                item_id = str(item.get("id", "")).strip()
+                if not item_id:
+                    continue
+
+                item_type = item.get("type")
+                if item_type in {"paragraph", "heading"}:
+                    has_text = bool((item.get("translated_text")
+                                    or item.get("text", "")).strip())
+                    if has_text:
+                        expected_ids.add(item_id)
+                elif item_type == "image":
+                    expected_ids.add(item_id)
+
+        found_ids: set[str] = set()
+        with zipfile.ZipFile(epub_path, "r") as archive:
+            html_names = [
+                name
+                for name in archive.namelist()
+                if name.lower().endswith((".xhtml", ".html", ".htm"))
+            ]
+
+            for name in html_names:
+                html = archive.read(name).decode("utf-8", errors="ignore")
+                matches = re.findall(r'data-source-id="([^"]+)"', html)
+                found_ids.update(matches)
+
+        missing_ids = sorted(expected_ids - found_ids)
+        if missing_ids:
+            preview = ", ".join(missing_ids[:10])
+            if len(missing_ids) > 10:
+                preview += ", ..."
+            raise ValueError(
+                "EPUB incompleto: nem todo o conteudo do PDF original foi preservado. "
+                f"Itens ausentes: {preview}"
+            )
