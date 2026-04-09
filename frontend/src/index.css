@@ -347,8 +347,6 @@ header p {
   inset: 0;
   pointer-events: none;
   filter: var(--ornament-filter);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
 }
 
 .upload-card:hover,
