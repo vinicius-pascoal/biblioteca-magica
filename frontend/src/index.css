@@ -1,14 +1,94 @@
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cormorant+Garamond:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Pirata+One&family=UnifrakturMaguntia&display=swap');
 
 :root {
-  --ink: #f4f3ff;
-  --muted: #c5c3e6;
-  --arcane: #79f5ff;
-  --arcane-strong: #53cad6;
-  --ember: #ffb86a;
-  --panel: rgba(24, 26, 48, 0.56);
-  --panel-border: rgba(121, 245, 255, 0.48);
-  --panel-shadow: 0 0 0 2px rgba(7, 12, 28, 0.55), 0 0 0 4px rgba(121, 245, 255, 0.16), 0 18px 40px rgba(8, 8, 20, 0.45);
+  --ink: #ecffef;
+  --muted: #b8dcbf;
+  --arcane: #56d175;
+  --arcane-strong: #40b860;
+  --ember: #8de7a3;
+
+  --title-ink: #f3fff5;
+  --heading-ink: #effff2;
+  --strong-ink: #d9ffe3;
+  --tag-ink: #dcffe4;
+  --button-ink: #ebffef;
+  --error-ink: #a6f2ba;
+
+  --shadow-ink: rgba(0, 0, 0, 0.9);
+  --glow-base: rgba(86, 209, 117, 0.55);
+  --glow-soft: rgba(124, 239, 148, 0.72);
+  --glow-strong: rgba(124, 239, 148, 0.85);
+
+  --hero-grad-start: rgba(19, 52, 32, 0.72);
+  --hero-grad-end: rgba(11, 32, 20, 0.62);
+  --hero-radial: rgba(86, 209, 117, 0.22);
+
+  --tag-border: rgba(124, 239, 148, 0.58);
+  --tag-bg: rgba(86, 209, 117, 0.18);
+
+  --panel: rgba(14, 36, 22, 0.6);
+  --panel-strong: rgba(14, 36, 22, 0.88);
+  --panel-border: rgba(86, 209, 117, 0.52);
+  --panel-shadow: 0 0 0 2px rgba(5, 18, 10, 0.55), 0 0 0 4px rgba(86, 209, 117, 0.2), 0 18px 40px rgba(2, 10, 5, 0.5);
+  --card-shadow: 0 12px 28px rgba(3, 16, 8, 0.4);
+
+  --input-border: rgba(124, 239, 148, 0.72);
+  --input-bg: rgba(16, 40, 25, 0.58);
+
+  --button-border: rgba(124, 239, 148, 0.7);
+  --button-grad-start: rgba(28, 90, 49, 0.98);
+  --button-grad-end: rgba(46, 124, 70, 0.98);
+  --button-inset-dark: rgba(6, 29, 16, 0.65);
+  --button-inset-light: rgba(194, 255, 206, 0.2);
+  --button-hover-outline: rgba(86, 209, 117, 0.48);
+  --button-hover-shadow: rgba(3, 16, 8, 0.45);
+  --button-hover-border: rgba(149, 246, 170, 0.78);
+
+  --track-bg: rgba(8, 26, 15, 0.88);
+  --track-border: rgba(108, 232, 138, 0.6);
+  --track-inset: rgba(5, 18, 10, 0.9);
+  --track-stripe-a: rgba(60, 125, 80, 0.18);
+  --track-stripe-b: rgba(60, 125, 80, 0.3);
+
+  --orb-border: rgba(145, 247, 168, 0.78);
+  --orb-core-high: #eefff1;
+  --orb-core-mid: #9df3b4;
+  --orb-core-low: #56d175;
+  --orb-ring: rgba(5, 18, 10, 0.72);
+  --orb-glow: rgba(122, 238, 148, 0.72);
+
+  --orb-translation-high: #f4fff6;
+  --orb-translation-mid: #b9f7ca;
+  --orb-translation-low: #72df90;
+  --orb-translation-border: rgba(138, 236, 160, 0.82);
+  --orb-translation-glow: rgba(138, 236, 160, 0.72);
+
+  --overlay-stripe-strong: rgba(255, 255, 255, 0.24);
+  --overlay-stripe-soft: rgba(255, 255, 255, 0.06);
+  --overlay-stripe-fill-strong: rgba(255, 255, 255, 0.2);
+  --overlay-stripe-fill-soft: rgba(255, 255, 255, 0.05);
+  --overlay-clear: rgba(255, 255, 255, 0);
+  --overlay-shine: rgba(255, 255, 255, 0.45);
+
+  --fill-main-start: #56d175;
+  --fill-main-mid-1: #73de8d;
+  --fill-main-mid-2: #5bc97a;
+  --fill-main-end: #8feb9f;
+  --fill-main-inset-dark: rgba(5, 28, 13, 0.5);
+  --fill-main-inset-light: rgba(210, 255, 220, 0.45);
+
+  --fill-translation-start: #4ebd6b;
+  --fill-translation-mid-1: #67d683;
+  --fill-translation-mid-2: #58c575;
+  --fill-translation-end: #3ca95a;
+  --fill-translation-inset-dark: rgba(7, 24, 12, 0.5);
+  --fill-translation-inset-light: rgba(198, 255, 210, 0.45);
+
+  --chapter-border: rgba(86, 209, 117, 0.5);
+  --chapter-grad-start: rgba(19, 48, 30, 0.74);
+  --chapter-grad-end: rgba(11, 30, 19, 0.67);
+  --chapter-shadow: rgba(5, 18, 10, 0.35);
+
   --radius: 0;
   color: var(--ink);
 }
@@ -20,17 +100,12 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Pirata One", cursive;
   color: var(--ink);
-  background-image:
-    linear-gradient(180deg, rgba(16, 19, 39, 0.5), rgba(18, 14, 37, 0.56)),
-    radial-gradient(circle at 18% 14%, rgba(121, 245, 255, 0.23), transparent 34%),
-    radial-gradient(circle at 83% 24%, rgba(255, 184, 106, 0.16), transparent 28%),
-    url("/imgs/fundo.png");
-  background-size: auto, auto, auto, cover;
+  background-image: url("/imgs/tiles_wall.png");
+  background-repeat: repeat;
   background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-size: auto;
 }
 
 .container {
@@ -42,18 +117,18 @@ body {
 
 h1 {
   margin: 0;
-  font-family: "Press Start 2P", monospace;
+  font-family: "UnifrakturMaguntia", cursive;
   line-height: 1.35;
   letter-spacing: 0.06em;
-  font-size: clamp(1.15rem, 2vw, 1.55rem);
-  color: #f5f7ff;
-  text-shadow: 0 0 12px rgba(121, 245, 255, 0.55);
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+  color: var(--title-ink);
+  text-shadow: 0 0 12px var(--glow-base);
 }
 
 header p {
   margin: 0.75rem 0 0;
   color: var(--muted);
-  font-size: clamp(1.15rem, 2.1vw, 1.4rem);
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
   line-height: 1.5;
 }
 
@@ -64,8 +139,8 @@ header p {
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
   background:
-    linear-gradient(130deg, rgba(35, 40, 69, 0.66), rgba(24, 24, 49, 0.55)),
-    radial-gradient(circle at 8% 10%, rgba(121, 245, 255, 0.2), transparent 40%);
+    linear-gradient(130deg, var(--hero-grad-start), var(--hero-grad-end)),
+    radial-gradient(circle at 8% 10%, var(--hero-radial), transparent 40%);
   box-shadow: var(--panel-shadow);
   overflow: hidden;
 }
@@ -77,8 +152,8 @@ header p {
   width: 9px;
   height: 9px;
   border-radius: 2px;
-  background: rgba(121, 245, 255, 0.65);
-  filter: drop-shadow(0 0 5px rgba(121, 245, 255, 0.8));
+  background: var(--glow-soft);
+  filter: drop-shadow(0 0 5px var(--glow-strong));
   animation: drift 6s ease-in-out infinite;
 }
 
@@ -97,12 +172,12 @@ header p {
   display: inline-flex;
   margin-bottom: 0.9rem;
   padding: 0.35rem 0.65rem;
-  border: 1px solid rgba(255, 184, 106, 0.52);
+  border: 1px solid var(--tag-border);
   border-radius: 999px;
-  background: rgba(255, 184, 106, 0.15);
-  color: #ffe0b0;
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.58rem;
+  background: var(--tag-bg);
+  color: var(--tag-ink);
+  font-family: "Pirata One", cursive;
+  font-size: 0.86rem;
   letter-spacing: 0.06em;
 }
 
@@ -115,37 +190,22 @@ header p {
   padding: 1rem 1.05rem;
   border: 2px solid var(--panel-border);
   border-radius: var(--radius);
-  background: var(--panel);
+  background: var(--panel-strong);
   backdrop-filter: blur(3px);
-  box-shadow: var(--panel-shadow);
-}
-
-.upload-card::before,
-.status-card::before,
-.download-card::before,
-.chapter-preview-card::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  pointer-events: none;
-  border: 2px solid rgba(9, 10, 22, 0.9);
-  clip-path: polygon(0 8px, 8px 8px, 8px 0,
-      calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
-      100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
-      8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px));
+  box-shadow: var(--card-shadow);
 }
 
 h2 {
   margin: 0 0 0.65rem;
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.78rem;
+  font-family: "UnifrakturMaguntia", cursive;
+  font-size: 1.08rem;
   color: var(--arcane);
   letter-spacing: 0.05em;
   line-height: 1.5;
 }
 
 h3 {
-  color: #f8f3ff;
+  color: var(--heading-ink);
 }
 
 .upload-label {
@@ -158,36 +218,36 @@ h3 {
 input[type="file"] {
   width: 100%;
   color: var(--ink);
-  border: 2px dashed rgba(121, 245, 255, 0.75);
+  border: 2px dashed var(--input-border);
   border-radius: 0;
   padding: 0.7rem;
-  background: rgba(29, 34, 66, 0.52);
+  background: var(--input-bg);
 }
 
 button,
 .download-button {
   margin-top: 1rem;
   display: inline-block;
-  border: 1px solid rgba(121, 245, 255, 0.65);
+  border: 1px solid var(--button-border);
   border-radius: 0;
   padding: 0.72rem 1rem;
-  background: linear-gradient(120deg, rgba(20, 43, 72, 0.98), rgba(27, 82, 105, 0.98));
-  color: #ebfbff;
+  background: linear-gradient(120deg, var(--button-grad-start), var(--button-grad-end));
+  color: var(--button-ink);
   text-decoration: none;
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.58rem;
+  font-family: "Pirata One", cursive;
+  font-size: 0.88rem;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-  box-shadow: inset -2px -2px 0 rgba(4, 15, 30, 0.6), inset 2px 2px 0 rgba(171, 255, 255, 0.2);
+  box-shadow: inset -2px -2px 0 var(--button-inset-dark), inset 2px 2px 0 var(--button-inset-light);
 }
 
 button:hover,
 .download-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 0 0 1px rgba(121, 245, 255, 0.45), 0 8px 20px rgba(3, 15, 35, 0.45);
-  border-color: rgba(255, 184, 106, 0.72);
+  box-shadow: 0 0 0 1px var(--button-hover-outline), 0 8px 20px var(--button-hover-shadow);
+  border-color: var(--button-hover-border);
 }
 
 button:disabled {
@@ -200,10 +260,10 @@ button:disabled {
   width: 100%;
   height: 18px;
   border-radius: 0;
-  background: rgba(10, 14, 34, 0.85);
-  border: 2px solid rgba(127, 255, 255, 0.55);
+  background: var(--track-bg);
+  border: 2px solid var(--track-border);
   overflow: hidden;
-  box-shadow: inset 0 0 0 2px rgba(10, 11, 25, 0.9);
+  box-shadow: inset 0 0 0 2px var(--track-inset);
 }
 
 .mana-bar {
@@ -221,19 +281,19 @@ button:disabled {
   height: 16px;
   flex: 0 0 auto;
   border-radius: 0;
-  border: 2px solid rgba(146, 255, 255, 0.75);
+  border: 2px solid var(--orb-border);
   background:
-    radial-gradient(circle at 35% 35%, #d9ffff 0 18%, #74ecff 25% 52%, #3ca9ff 62% 100%),
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.18) 0 2px, rgba(255, 255, 255, 0) 2px 4px);
-  box-shadow: 0 0 0 2px rgba(7, 11, 27, 0.72), 0 0 12px rgba(113, 242, 255, 0.72);
+    radial-gradient(circle at 35% 35%, var(--orb-core-high) 0 18%, var(--orb-core-mid) 25% 52%, var(--orb-core-low) 62% 100%),
+    repeating-linear-gradient(45deg, var(--overlay-stripe-fill-strong) 0 2px, var(--overlay-clear) 2px 4px);
+  box-shadow: 0 0 0 2px var(--orb-ring), 0 0 12px var(--orb-glow);
 }
 
 .translation-orb {
   background:
-    radial-gradient(circle at 35% 35%, #fff5cb 0 18%, #ffd277 25% 52%, #ff9450 62% 100%),
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.18) 0 2px, rgba(255, 255, 255, 0) 2px 4px);
-  border-color: rgba(255, 217, 130, 0.8);
-  box-shadow: 0 0 0 2px rgba(7, 11, 27, 0.72), 0 0 12px rgba(255, 186, 86, 0.72);
+    radial-gradient(circle at 35% 35%, var(--orb-translation-high) 0 18%, var(--orb-translation-mid) 25% 52%, var(--orb-translation-low) 62% 100%),
+    repeating-linear-gradient(45deg, var(--overlay-stripe-fill-strong) 0 2px, var(--overlay-clear) 2px 4px);
+  border-color: var(--orb-translation-border);
+  box-shadow: 0 0 0 2px var(--orb-ring), 0 0 12px var(--orb-translation-glow);
 }
 
 .progress-track::before {
@@ -241,25 +301,25 @@ button:disabled {
   position: absolute;
   inset: 2px;
   background: repeating-linear-gradient(90deg,
-      rgba(90, 123, 186, 0.15) 0 8px,
-      rgba(90, 123, 186, 0.26) 8px 16px);
+      var(--track-stripe-a) 0 8px,
+      var(--track-stripe-b) 8px 16px);
 }
 
 .progress-fill {
   position: relative;
   height: 100%;
   background:
-    linear-gradient(90deg, #58d7ff, #6af6ff 45%, #5be4ff 60%, #7de9ff),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0 8px, rgba(255, 255, 255, 0.05) 8px 16px);
+    linear-gradient(90deg, var(--fill-main-start), var(--fill-main-mid-1) 45%, var(--fill-main-mid-2) 60%, var(--fill-main-end)),
+    repeating-linear-gradient(90deg, var(--overlay-stripe-fill-strong) 0 8px, var(--overlay-stripe-fill-soft) 8px 16px);
   transition: width 0.35s ease;
-  box-shadow: inset 0 -2px 0 rgba(5, 29, 43, 0.5), inset 0 2px 0 rgba(188, 255, 255, 0.45);
+  box-shadow: inset 0 -2px 0 var(--fill-main-inset-dark), inset 0 2px 0 var(--fill-main-inset-light);
 }
 
 .translation-fill {
   background:
-    linear-gradient(90deg, #ffc45b, #ffd973 45%, #ffb05b 75%, #ff9652),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.24) 0 8px, rgba(255, 255, 255, 0.06) 8px 16px);
-  box-shadow: inset 0 -2px 0 rgba(69, 26, 2, 0.5), inset 0 2px 0 rgba(255, 239, 179, 0.45);
+    linear-gradient(90deg, var(--fill-translation-start), var(--fill-translation-mid-1) 45%, var(--fill-translation-mid-2) 75%, var(--fill-translation-end)),
+    repeating-linear-gradient(90deg, var(--overlay-stripe-strong) 0 8px, var(--overlay-stripe-soft) 8px 16px);
+  box-shadow: inset 0 -2px 0 var(--fill-translation-inset-dark), inset 0 2px 0 var(--fill-translation-inset-light);
 }
 
 .translation-meta {
@@ -270,7 +330,7 @@ button:disabled {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  background: linear-gradient(90deg, transparent, var(--overlay-shine), transparent);
   transform: translateX(-100%);
   animation: mana-glint 1.8s linear infinite;
 }
@@ -281,18 +341,18 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.48rem;
+  font-family: "Pirata One", cursive;
+  font-size: 0.74rem;
   letter-spacing: 0.03em;
-  color: #effbff;
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+  color: var(--heading-ink);
+  text-shadow: 0 0 4px var(--shadow-ink);
   z-index: 2;
   pointer-events: none;
 }
 
 .error {
   margin-top: 0.75rem;
-  color: #ff9ea2;
+  color: var(--error-ink);
   font-weight: 600;
 }
 
@@ -308,16 +368,20 @@ button:disabled {
 }
 
 .chapter-item {
-  border: 2px solid rgba(121, 245, 255, 0.4);
+  border: 2px solid var(--chapter-border);
   border-radius: 0;
-  background: linear-gradient(160deg, rgba(26, 30, 56, 0.74), rgba(20, 22, 45, 0.67));
+  background:
+    linear-gradient(160deg, var(--chapter-grad-start), var(--chapter-grad-end)),
+    url("/imgs/tiles_blackstone.png");
+  background-repeat: no-repeat, repeat;
+  background-position: center, top left;
   padding: 0.85rem;
-  box-shadow: inset 0 0 0 2px rgba(9, 12, 28, 0.7);
+  box-shadow: 0 8px 20px var(--chapter-shadow);
 }
 
 .chapter-item h3 {
   margin: 0;
-  font-size: 1.16rem;
+  font-size: 1.3rem;
 }
 
 .chapter-item p {
@@ -325,7 +389,7 @@ button:disabled {
 }
 
 strong {
-  color: #e9feff;
+  color: var(--strong-ink);
 }
 
 @keyframes drift {
@@ -361,11 +425,11 @@ strong {
   }
 
   h1 {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
   header p {
-    font-size: 1.06rem;
+    font-size: 1.14rem;
   }
 
   button,
