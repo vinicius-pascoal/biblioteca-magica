@@ -9,6 +9,14 @@ import { cancelJob, createJob, getDownloadUrl, getJobChapters } from "../service
 import type { ChapterPreview as ChapterPreviewItem } from "../types/job";
 
 export function HomePage() {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const saved = window.localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") {
+      return saved;
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
   const [jobId, setJobId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
@@ -32,6 +40,11 @@ export function HomePage() {
     }
     return getDownloadUrl(jobId);
   }, [job, jobId]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    window.localStorage.setItem("theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     if (!jobId) {
@@ -98,7 +111,17 @@ export function HomePage() {
   return (
     <main className="container">
       <header className="hero">
-        <h1>Biblioteca Magica</h1>
+        <div className="hero-top">
+          <h1>Biblioteca Magica</h1>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => setTheme((prev) => (prev === "light" ? "dark" : "light"))}
+            aria-label={theme === "light" ? "Ativar modo escuro" : "Ativar modo claro"}
+          >
+            {theme === "light" ? "Modo escuro" : "Modo claro"}
+          </button>
+        </div>
         <p>Converta e traduza PDF para EPUB reflow em pt-BR com processamento local.</p>
       </header>
 
