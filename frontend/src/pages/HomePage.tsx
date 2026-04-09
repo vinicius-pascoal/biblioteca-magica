@@ -110,6 +110,14 @@ export function HomePage() {
 
   return (
     <main className="container">
+      <div className="floating-orbs" aria-hidden="true">
+        <span className="floating-orb orb-1" />
+        <span className="floating-orb orb-2" />
+        <span className="floating-orb orb-3" />
+        <span className="floating-orb orb-4" />
+        <span className="floating-orb orb-5" />
+      </div>
+
       <header className="hero">
         <div className="hero-top">
           <h1>Biblioteca Magica</h1>

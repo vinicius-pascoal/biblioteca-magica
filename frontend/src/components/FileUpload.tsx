@@ -33,13 +33,17 @@ export function FileUpload({ disabled, onSubmit }: FileUploadProps) {
       <label htmlFor="pdf-file" className="upload-label">
         Arquivo PDF
       </label>
-      <input
-        id="pdf-file"
-        type="file"
-        accept="application/pdf"
-        onChange={handleFileChange}
-        disabled={disabled}
-      />
+      <div className="file-input-shell">
+        <input
+          id="pdf-file"
+          className="file-input"
+          type="file"
+          accept="application/pdf"
+          onChange={handleFileChange}
+          disabled={disabled}
+        />
+        <p className="file-upload-tip">Arraste um PDF aqui ou use o botao ao lado.</p>
+      </div>
 
       {file ? <p className="hint">Selecionado: {file.name}</p> : null}
       {error ? <p className="error">{error}</p> : null}
